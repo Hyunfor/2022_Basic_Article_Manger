@@ -1,5 +1,7 @@
 package com.KoreaIT.java.BAM;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -12,28 +14,30 @@ public class Main {
 		
 		int lastArticleId = 0;
 
+		List<Article> articles = new ArrayList<>();
 		
 		while(true) {
 			System.out.printf("명령어 ) ");
-			String cmd = sc.nextLine();
+			String cmd = sc.nextLine().trim(); // trim() 공백 제거 
 			
 			if(cmd.length() == 0 ) {
 				System.out.println("명령어를 입력해주세요.");
-				continue; // continue를 만나면 while 문 처음으로 곧바로 이동. 반복 
+				continue; 
 			}
 			
 			if(cmd.equals("exit")) {
-				break; // 종료 
+				break;
 			} 
 			
 			if (cmd.equals("article write")) {
 				int id = lastArticleId + 1;
+				lastArticleId = id;
 				System.out.printf("제목 : ");
 				String title = sc.nextLine();
 				System.out.printf("내용 : ");
 				String body = sc.nextLine();
 				
-				lastArticleId ++;
+				Article article = new Article(id, title, body);
 				
 				System.out.printf("%d번 글이 생성되었습니다 \n", id, title, body);
 				
@@ -51,4 +55,17 @@ public class Main {
 		sc.close();
 	}
 
+}
+
+class Article {
+	int id;
+	String title;
+	String body;
+	
+	Article (int id, String title, String body){
+		this.id = id;
+		this.title = title;
+		this.body = body;
+	}
+	
 }
