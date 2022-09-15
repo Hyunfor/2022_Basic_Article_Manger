@@ -57,12 +57,34 @@ public class Main {
 					System.out.printf("%d	|	%s \n", article.id, article.title);
 				}
 				
+			} else if (cmd.startsWith("article detail ")) {
+				String[] cmdBits = cmd.split(" ");
+				int id = Integer.parseInt(cmdBits[2]);
+				// split - 객체를 지정한 구분자를 이용하여 여러 개의 문자열로 나눔
 				
+				boolean found = false;
+				for(int i = 0; i < articles.size(); i++) { // 게시글 순회
+					Article article = articles.get(i);
+					
+					if(article.id == id) { // 명령어에 입력한 id가 일치한다면
+						found = true;
+						System.out.printf("%d번 게시글은 존재합니다.\n", id);
+					}
+				}
+				
+				if(found == false) {
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
+					continue;
+				}
+
+//				System.out.printf("번호 : %s", article.id);
+//				System.out.printf("날짜 : %s", article.regDate);
+//				System.out.printf("제목 : %d", article.title);
+//				System.out.printf("내용 : %d", article.body);
 				
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다.");
 			}
-			
 		}
 		
 		System.out.println("== 프로그램 종료 ==");
@@ -71,6 +93,7 @@ public class Main {
 	}
 
 }
+
 
 class Article {
 	int id;
@@ -82,7 +105,5 @@ class Article {
 		this.title = title;
 		this.body = body;
 	}
-
-	
 	
 }
