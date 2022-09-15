@@ -60,27 +60,54 @@ public class Main {
 			} else if (cmd.startsWith("article detail ")) {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
-				// split - 객체를 지정한 구분자를 이용하여 여러 개의 문자열로 나눔
 				
-				boolean found = false;
+				Article foundArticle = null;
+				
 				for(int i = 0; i < articles.size(); i++) { // 게시글 순회
 					Article article = articles.get(i);
 					
 					if(article.id == id) { // 명령어에 입력한 id가 일치한다면
-						found = true;
+						// 데이터를 순회하면서 뽑아내는 기능만 하는 로직
+						foundArticle = article; 
 						System.out.printf("%d번 게시글은 존재합니다.\n", id);
+						break;
 					}
 				}
 				
-				if(found == false) {
+				if(foundArticle == null) { // foundArticle이 있으니 found는 없어도 됨.
+					// 출력을 담당하는 로직
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
+					continue;
+				} else { // 일치하는 게시물이 존재하는 경우	
+					System.out.printf("번호 : %d \n", foundArticle.id);
+					System.out.printf("날짜 : %s \n", "2022-12-12 12:12:12");
+					System.out.printf("제목 : %s \n", foundArticle.title);
+					System.out.printf("내용 : %s \n", foundArticle.body);
+				}
+
+
+
+				
+			} else if (cmd.startsWith("article delete ")) {
+				String[] cmdBits = cmd.split(" ");
+				int id = Integer.parseInt(cmdBits[2]);
+				
+				Article foundArticle = null;
+				
+				for(int i = 0; i < articles.size(); i++) { // 게시글 순회
+					Article article = articles.get(i);
+					
+					if(article.id == id) { // 명령어에 입력한 id가 일치한다면
+						foundArticle = article; 
+						System.out.printf("%d번 게시글은 삭제합니다.\n", id);
+						break;
+					}
+				}
+				
+				if(foundArticle == null) {
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					continue;
 				}
-
-//				System.out.printf("번호 : %s", article.id);
-//				System.out.printf("날짜 : %s", article.regDate);
-//				System.out.printf("제목 : %d", article.title);
-//				System.out.printf("내용 : %d", article.body);
 				
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다.");
