@@ -39,10 +39,25 @@ public class Main {
 				
 				Article article = new Article(id, title, body);
 				
+				articles.add(article); // write 할때마다 게시글을 하나씩 배열에 저장
+				
 				System.out.printf("%d번 글이 생성되었습니다 \n", id, title, body);
 				
 			} else if (cmd.equals("article list")) {
-				System.out.println("게시물이 없습니다.");
+				System.out.println("== 게시물 리스트 ==");
+				
+				if (articles.size() == 0) {
+					System.out.println("게시물이 없습니다.");
+				}
+				
+				System.out.println("번호	|	제목");
+				
+				for(int i = articles.size() - 1; i >= 0; i--) { // 순회는 역순으로
+					Article article = articles.get(i);
+					System.out.printf("%d	|	%s \n", article.id, article.title);
+				}
+				
+				
 				
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다.");
@@ -67,5 +82,7 @@ class Article {
 		this.title = title;
 		this.body = body;
 	}
+
+	
 	
 }
