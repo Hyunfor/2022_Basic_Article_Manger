@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-// 깃 업로드 테스트
+
 	public static void main(String[] args) {
 
 		System.out.println("== 프로그램 시작 ==");
