@@ -83,34 +83,34 @@ public class Main {
 					// 출력을 담당하는 로직
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					continue;
-				} else { // 일치하는 게시물이 존재하는 경우	
+				} 
+				
 					System.out.printf("번호 : %d \n", foundArticle.id);
 					System.out.printf("날짜 : %s \n", formatter.format(date));
 					System.out.printf("제목 : %s \n", foundArticle.title);
 					System.out.printf("내용 : %s \n", foundArticle.body);
-				}
 				
 			} else if (cmd.startsWith("article delete ")) {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 				
-				Article foundArticle = null;
+				int foundIndex = -1;  // index를 사용하기 위해 변수를 하나 만듦 . -1번으로 존재하는 index는 존재하지 않기 때문에 
 				
 				for(int i = 0; i < articles.size(); i++) { // 게시글 순회
 					Article article = articles.get(i);
 					
 					if(article.id == id) { // 명령어에 입력한 id가 일치한다면
-						foundArticle = article; 
+						foundIndex = i;
 						break;
 					}
 				}
 				
-				if(foundArticle == null) {
+				if(foundIndex == -1) {
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					continue;
 				}
 				
-				articles.remove(id - 1); // 삭제
+				articles.remove(foundIndex); // index 번호 삭제
 				System.out.printf("%d번 게시물이 삭제되었습니다.\n", id); // 삭제가 된다면 출력
 				
 			} else {
