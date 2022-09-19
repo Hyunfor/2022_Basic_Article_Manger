@@ -60,7 +60,40 @@ public class Main {
 					System.out.printf("%d	|	%s	|	%s \n", article.id, article.title, article.regDate);
 				}
 				
-			} else if (cmd.startsWith("article detail ")) {
+			} else if (cmd.startsWith("article modify ")) {
+				String[] cmdBits = cmd.split(" ");
+				int id = Integer.parseInt(cmdBits[2]);
+				
+				Article foundArticle = null;
+				
+				for(int i = 0; i < articles.size(); i++) { 
+					Article article = articles.get(i);
+					
+					if(article.id == id) { 
+						foundArticle = article; 
+						break;
+					}
+					
+				}
+				
+				if(foundArticle == null) { 
+					
+					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
+					continue;
+				}
+				
+				System.out.printf("수정할 제목 : ");
+				String title = sc.nextLine();
+				System.out.printf("수정할 내용 : ");
+				String body = sc.nextLine();
+				
+				// 객체 리모컨이 여러개라 바뀌는게 가능
+				foundArticle.title = title; // 리모컨이 여러개 가지고 있어서 새로 입력 받은것으로 바뀜
+				foundArticle.body = body;
+				
+				System.out.printf("%d번 글이 수정되었습니다.\n", id, title, body);
+				
+			}  else if (cmd.startsWith("article detail ")) {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 				
