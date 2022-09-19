@@ -5,17 +5,23 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-
+	
+	static List<Article> articles;
+	
+	static { // static 생성자
+		articles = new ArrayList<>();
+	}
+	
 	public static void main(String[] args) {
 
 		System.out.println("== 프로그램 시작 ==");
 		
+		makeTestData(); // 메서드 실행
+		
 		Scanner sc = new Scanner(System.in);
 		
-		int lastArticleId = 0;
+//		int lastArticleId = 0;
 
-		List<Article> articles = new ArrayList<>();
-		
 		while(true) {
 			System.out.printf("명령어 ) ");
 			String cmd = sc.nextLine().trim(); // trim() 공백 제거 
@@ -30,8 +36,9 @@ public class Main {
 			} 
 			
 			if (cmd.equals("article write")) {
-				int id = lastArticleId + 1;
-				lastArticleId = id;
+				int id = articles.size() + 1;
+//				int id = lastArticleId + 1;
+//				lastArticleId = id;
 				String regDate = Util.getNowDateStr();
 				
 				System.out.printf("제목 : ");
@@ -150,11 +157,21 @@ public class Main {
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다.");
 			}
+			
 		}
 		
 		System.out.println("== 프로그램 종료 ==");
 		
+		
 		sc.close();
+	}
+
+	private static void makeTestData() {
+		System.out.println("테스트를 위한 게시물 데이터를 생성합니다.");
+		articles.add(new Article(1, Util.getNowDateStr(), "제목1", "내용1", 11));
+		articles.add(new Article(2, Util.getNowDateStr() , "제목2", "내용2", 12));
+		articles.add(new Article(3, Util.getNowDateStr() , "제목3", "내용3", 13));
+		
 	}
 
 }
@@ -168,13 +185,20 @@ class Article {
 	int viewCnt;
 	
 	Article (int id, String regDate, String title, String body){ // 생성자
+		this(id, regDate, title, body, 0); // 다른 생성자에게 일을 떠넘김
+	}
+	
+	// 함수명이 똑같지만 매개변수, 인자의 차이로 쓰는것이 오버로딩
+	public Article(int id, String regDate, String title, String body, int viewCnt) {
 		this.id = id;
 		this.regDate = regDate;
 		this.title = title;
 		this.body = body;
+		this.viewCnt = viewCnt;
 	}
-	
+
 	public void addViewCnt(){ // 조회수 증가
 		viewCnt++;
 	}
+	
 }
