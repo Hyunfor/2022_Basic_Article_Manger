@@ -21,8 +21,6 @@ public class App {
 		makeTestData(); // 메서드 실행
 		
 		Scanner sc = new Scanner(System.in);
-		
-//		int lastArticleId = 0;
 
 		while(true) {
 			System.out.printf("명령어 ) ");
@@ -39,8 +37,6 @@ public class App {
 			
 			if (cmd.equals("article write")) {
 				int id = articles.size() + 1;
-//				int id = lastArticleId + 1;
-//				lastArticleId = id;
 				String regDate = Util.getNowDateStr();
 				
 				System.out.printf("제목 : ");
@@ -106,18 +102,7 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 				
-				Article foundArticle = null;
-				
-				for(int i = 0; i < articles.size(); i++) { // 게시글 순회
-					Article article = articles.get(i);
-					
-					if(article.id == id) { // 명령어에 입력한 id가 일치한다면
-						// 데이터를 순회하면서 뽑아내는 기능만 하는 로직
-						foundArticle = article; 
-						System.out.printf("%d번 게시글은 존재합니다.\n", id);
-						break;
-					}
-				}
+				Article foundArticle = getArticleById();
 				
 				if(foundArticle == null) { // foundArticle이 있으니 found는 없어도 됨.
 					// 출력을 담당하는 로직
@@ -166,6 +151,20 @@ public class App {
 		
 		
 		sc.close();
+	}
+
+	private Article getArticleById() {
+		for(int i = 0; i < articles.size(); i++) { // 게시글 순회
+			Article article = articles.get(i);
+			
+			if(article.id == id) { // 명령어에 입력한 id가 일치한다면
+				// 데이터를 순회하면서 뽑아내는 기능만 하는 로직
+				foundArticle = article; 
+				System.out.printf("%d번 게시글은 존재합니다.\n", id);
+				break;
+			}
+		}
+		return null;
 	}
 
 	private void makeTestData() {
