@@ -69,7 +69,7 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 				
-				Article foundArticle = null;
+				Article foundArticle = getArticleById(id);
 				
 				for(int i = 0; i < articles.size(); i++) { 
 					Article article = articles.get(i);
@@ -102,9 +102,9 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 				
-				Article foundArticle = getArticleById();
+				Article foundArticle = getArticleById(id); // 인자로 넣음.
 				
-				if(foundArticle == null) { // foundArticle이 있으니 found는 없어도 됨.
+				if(foundArticle == null) {
 					// 출력을 담당하는 로직
 					System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 					continue;
@@ -122,7 +122,7 @@ public class App {
 				String[] cmdBits = cmd.split(" ");
 				int id = Integer.parseInt(cmdBits[2]);
 				
-				int foundIndex = -1;  // index를 사용하기 위해 변수를 하나 만듦 . -1번으로 존재하는 index는 존재하지 않기 때문에 
+				int foundIndex = getArticleIndexById(id);  // index를 사용하기 위해 변수를 하나 만듦 . -1번으로 존재하는 index는 존재하지 않기 때문에 
 				
 				for(int i = 0; i < articles.size(); i++) { // 게시글 순회
 					Article article = articles.get(i);
@@ -152,20 +152,61 @@ public class App {
 		
 		sc.close();
 	}
-
-	private Article getArticleById() {
-		for(int i = 0; i < articles.size(); i++) { // 게시글 순회
-			Article article = articles.get(i);
+	
+	private int getArticleIndexById(int id) {
+		int i = 0;
+		for(Article article : articles) { 
 			
-			if(article.id == id) { // 명령어에 입력한 id가 일치한다면
-				// 데이터를 순회하면서 뽑아내는 기능만 하는 로직
-				foundArticle = article; 
-				System.out.printf("%d번 게시글은 존재합니다.\n", id);
-				break;
+			if(article.id == id) { 
+				return i;
 			}
+			i++;
 		}
-		return null;
+		return -1;
 	}
+
+//	private int getArticleIndexById(int id) {
+//		for(int i = 0; i < articles.size(); i++) { 
+//			Article article = articles.get(i);
+//			
+//			if(article.id == id) { 
+//				return i;
+//			}
+//		}
+//		return -1;
+//	}
+
+	private Article getArticleById(int id) { // 더 간결한 for문 - 단순히 도는 for문만 가능
+
+		int index = getArticleIndexById(id);
+		
+		if(index != -1) {
+			return articles.get(index);
+		}
+		
+		return null;
+		
+		//		for(Article article : articles) { 
+//			
+//			if(article.id == id) { 
+//				return article;
+//				
+//			}
+//		}
+//		return null;
+	}
+	
+//	private Article getArticleById(int id) { // 인자를 매개변수로 받아야함.
+//		for(int i = 0; i < articles.size(); i++) { // 게시글 순회
+//			Article article = articles.get(i);
+//			
+//			if(article.id == id) { // 명령어에 입력한 id가 일치한다면
+//				// 데이터를 순회하면서 뽑아내는 기능만 하는 로직
+//				return article;
+//			}
+//		}
+//		return null;
+//	}
 
 	private void makeTestData() {
 		System.out.println("테스트를 위한 게시물 데이터를 생성합니다.");
