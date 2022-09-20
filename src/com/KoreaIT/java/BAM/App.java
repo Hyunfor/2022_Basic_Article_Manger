@@ -51,17 +51,43 @@ public class App {
 				
 				System.out.printf("%d번 글이 생성되었습니다 \n", id, title, body);
 				
-			} else if (cmd.equals("article list")) {
+			} else if (cmd.startsWith("article list")) {
 				System.out.println("== 게시물 리스트 ==");
 				
 				if (articles.size() == 0) {
 					System.out.println("게시물이 없습니다.");
+					continue;
+				}
+				
+				List<Article> forPrintArticles = articles; 
+				
+				String searchKeyword = cmd.substring("article list".length()).trim(); 
+				// substring - 앞의 글자수를 제외하고 뒤에 쓰는 글자 index부터 가져옴
+				
+				
+				if(searchKeyword.length() > 0) { // 리스트 검색
+					
+					System.out.println("검색어 : " + searchKeyword);
+					
+					forPrintArticles = new ArrayList<>(); // 해당된다면 객체 하나 더 생성
+					
+					for(Article article : articles) {
+						if(article.title.contains(searchKeyword)) {
+							forPrintArticles.add(article);
+						}
+					}
+					
+					if(forPrintArticles.size() == 0) { // 검색해도 없는 경우
+						System.out.println("검색결과가 없습니다.");
+						continue;
+					}
+					
 				}
 				
 				System.out.println("번호	|	제목	|	날짜			|	조회수");
 				
-				for(int i = articles.size() - 1; i >= 0; i--) { // 순회는 역순으로
-					Article article = articles.get(i);
+				for(int i = forPrintArticles.size() - 1; i >= 0; i--) { // 순회는 역순으로
+					Article article = forPrintArticles.get(i);
 					System.out.printf("%d	|	%s	|	%s	|	%d \n", article.id, article.title, article.regDate, article.viewCnt);
 				}
 				
