@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.KoreaIT.java.BAM.dto.Article;
+import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class App {
 	private  List<Article> articles;
+	private List<Member> members;
 
 	App() { // static 생성자
 		articles = new ArrayList<>();
+		members = new ArrayList<>();
 	}
 	
 	public void run() {
@@ -33,9 +36,29 @@ public class App {
 			
 			if(cmd.equals("exit")) {
 				break;
-			} 
+			}
 			
-			if (cmd.equals("article write")) {
+			if (cmd.equals("member join")) { // 회원가입 
+				int id = members.size() + 1;
+				String regDate = Util.getNowDateStr();
+				
+				System.out.printf("아이디 : ");
+				String loingId = sc.nextLine();
+				System.out.printf("비밀번호 : ");
+				String loginPw = sc.nextLine();
+				System.out.printf("비밀번호 확인 : ");
+				String loginPwChk = sc.nextLine();
+				System.out.printf("이름 : ");
+				String name = sc.nextLine();
+
+				
+				Member member = new Member(id, regDate, loingId, loginPw, name);
+				
+				members.add(member); // join 할때마다 게시글을 하나씩 배열에 저장
+				
+				System.out.printf("%s 회원님 환영합니다 \n", loingId);
+				
+			} else if (cmd.equals("article write")) {
 				int id = articles.size() + 1;
 				String regDate = Util.getNowDateStr();
 				
