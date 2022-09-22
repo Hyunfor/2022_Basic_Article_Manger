@@ -8,14 +8,22 @@ import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
 
-public class ArticleController {
+public class ArticleController extends Controller{
 	List<Article> articles;
 	Scanner sc;
+	String cmd;
 	
 	public ArticleController(List<Article> articles, Scanner sc) {
 		this.articles = articles;
 		this.sc = sc;
 	}
+	
+	@Override
+	public void doAction(String cmd) {
+		this.cmd = cmd;
+		
+	}
+	
 	public void doWrite(){
 		int id = articles.size() + 1;
 		String regDate = Util.getNowDateStr();
@@ -198,6 +206,7 @@ public class ArticleController {
 //		}
 //		return null;
 	}
+
 
 
 	
