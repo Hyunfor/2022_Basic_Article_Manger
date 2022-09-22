@@ -9,20 +9,19 @@ import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller{
-	List<Article> articles;
-	Scanner sc;
-	String cmd;
-	String methodName;
+	private List<Article> articles;
+	private Scanner sc;
+	private String cmd;
+	// 일단 private 으로 만들고 다른 곳에서 필요하게 된다면 public으로 바꾸는 방향으로 
 	
-	public ArticleController(List<Article> articles, Scanner sc) {
-		this.articles = articles;
+	public ArticleController(Scanner sc) {
+		this.articles = new ArrayList<>();
 		this.sc = sc;
 	}
 	
 	@Override
 	public void doAction(String cmd, String methodName) {
 		this.cmd = cmd;
-		this.methodName = methodName;
 		
 		switch(methodName) {
 		case "write":
@@ -40,10 +39,13 @@ public class ArticleController extends Controller{
 		case "delete":
 			doDelete();
 			break;
+			default:
+				System.out.println("존재하지 않는 명령어 입니다.");
+				break;
 		}
 	}
 	
-	public void doWrite(){
+	private void doWrite(){
 		int id = articles.size() + 1;
 		String regDate = Util.getNowDateStr();
 		
@@ -59,7 +61,7 @@ public class ArticleController extends Controller{
 		
 		System.out.printf("%d번 글이 생성되었습니다 \n", id, title, body);
 	}
-	public void showList() {
+	private void showList() {
 		System.out.println("== 게시물 리스트 ==");
 		
 		if (articles.size() == 0) {
@@ -101,7 +103,7 @@ public class ArticleController extends Controller{
 		
 	}
 	
-	public void doModify() {
+	private void doModify() {
 		String[] cmdBits = cmd.split(" ");
 		
 		if(cmdBits.length == 2) {
@@ -142,7 +144,7 @@ public class ArticleController extends Controller{
 		
 	}
 	
-	public void showDetail() {
+	private void showDetail() {
 		String[] cmdBits = cmd.split(" ");
 		
 		if(cmdBits.length == 2) {
@@ -170,7 +172,7 @@ public class ArticleController extends Controller{
 		
 	}
 	
-	public void doDelete() {
+	private void doDelete() {
 		String[] cmdBits = cmd.split(" ");
 		
 		if(cmdBits.length == 2) {
@@ -258,5 +260,13 @@ public class ArticleController extends Controller{
 //		}
 //		return null;
 //	}
+	
+	public void makeTestData() {
+		System.out.println("테스트를 위한 게시물 데이터를 생성합니다.");
+		articles.add(new Article(1, Util.getNowDateStr(), "제목1", "내용1", 11));
+		articles.add(new Article(2, Util.getNowDateStr() , "제목2", "내용2", 12));
+		articles.add(new Article(3, Util.getNowDateStr() , "제목3", "내용3", 13));
+		
+	}
 	
 }
