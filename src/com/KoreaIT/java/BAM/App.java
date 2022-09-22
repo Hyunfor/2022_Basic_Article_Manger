@@ -64,7 +64,7 @@ public class App {
 				continue;
 			}
 			
-			controller.doAction(cmd);
+			controller.doAction(cmd, methodName);
 			
 //			if (cmd.equals("member join")) { // 회원가입 
 //				memberController.doJoin();	
@@ -82,9 +82,12 @@ public class App {
 //			System.out.println("존재하지 않는 명령어 입니다.");
 //			}
 		
-		System.out.println("== 프로그램 종료 ==");
+		
 		
 		}
+		
+		System.out.println("== 프로그램 종료 ==");
+		
 		sc.close();
 	}
 

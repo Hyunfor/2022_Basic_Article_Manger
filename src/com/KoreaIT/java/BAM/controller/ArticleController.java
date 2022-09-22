@@ -12,6 +12,7 @@ public class ArticleController extends Controller{
 	List<Article> articles;
 	Scanner sc;
 	String cmd;
+	String methodName;
 	
 	public ArticleController(List<Article> articles, Scanner sc) {
 		this.articles = articles;
@@ -19,9 +20,27 @@ public class ArticleController extends Controller{
 	}
 	
 	@Override
-	public void doAction(String cmd) {
+	public void doAction(String cmd, String methodName) {
 		this.cmd = cmd;
+		this.methodName = methodName;
 		
+		switch(methodName) {
+		case "write":
+			doWrite();
+			break;
+		case "list":
+			showList();
+			break;
+		case "modify":
+			doModify();
+			break;
+		case "detail":
+			showDetail();
+			break;
+		case "delete":
+			doDelete();
+			break;
+		}
 	}
 	
 	public void doWrite(){
@@ -40,7 +59,7 @@ public class ArticleController extends Controller{
 		
 		System.out.printf("%d번 글이 생성되었습니다 \n", id, title, body);
 	}
-	public void showList(String cmd) {
+	public void showList() {
 		System.out.println("== 게시물 리스트 ==");
 		
 		if (articles.size() == 0) {
@@ -82,8 +101,14 @@ public class ArticleController extends Controller{
 		
 	}
 	
-	public void doModify(String cmd) {
+	public void doModify() {
 		String[] cmdBits = cmd.split(" ");
+		
+		if(cmdBits.length == 2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+		
 		int id = Integer.parseInt(cmdBits[2]);
 		
 		Article foundArticle = getArticleById(id);
@@ -117,8 +142,14 @@ public class ArticleController extends Controller{
 		
 	}
 	
-	public void showDetail(String cmd) {
+	public void showDetail() {
 		String[] cmdBits = cmd.split(" ");
+		
+		if(cmdBits.length == 2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+		
 		int id = Integer.parseInt(cmdBits[2]);
 		
 		Article foundArticle = getArticleById(id); // 인자로 넣음.
@@ -139,8 +170,14 @@ public class ArticleController extends Controller{
 		
 	}
 	
-	public void doDelete(String cmd) {
+	public void doDelete() {
 		String[] cmdBits = cmd.split(" ");
+		
+		if(cmdBits.length == 2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+		
 		int id = Integer.parseInt(cmdBits[2]);
 		
 		int foundIndex = getArticleIndexById(id);  // index를 사용하기 위해 변수를 하나 만듦 . -1번으로 존재하는 index는 존재하지 않기 때문에 
