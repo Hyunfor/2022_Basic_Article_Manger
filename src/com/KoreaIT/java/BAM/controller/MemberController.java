@@ -30,8 +30,14 @@ public class MemberController extends Controller{
 		case "login":
 			doLogin();
 			break;
+		case "logout":
+			doLogout();
+			break;
 		case "profile":
 			showProfile();
+			break;
+		case "list":
+			showList();
 			break;
 			default:
 				System.out.println("존재하지 않는 명령어 입니다.");
@@ -39,7 +45,6 @@ public class MemberController extends Controller{
 
 		}
 	}
-
 
 	private void doJoin(){
 		int id = members.size() + 1;
@@ -89,6 +94,11 @@ public class MemberController extends Controller{
 	
 	
 	private void doLogin(){
+		if(isLogined()) { 
+			System.out.println("이미 로그인 상태입니다.");
+			return;
+		}
+		
 		System.out.printf("로그인 아이디 : ");
 		String loginId = sc.nextLine();
 		System.out.printf("비밀번호 : ");
@@ -113,43 +123,70 @@ public class MemberController extends Controller{
 	}
 	
 	private void showProfile() {
-System.out.println("== 회원 정보 ==");
+		
+		if(loginedMember == null) { // 로그아웃 상태
+			System.out.println("로그아웃 상태입니다.");
+			return;
+		}
+		
+		System.out.println("== 내 정보 ==");
+		System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
+		System.out.printf("이름 : %s\n", loginedMember.name);
+		
+	}
+	
+	private boolean isLogined() {
+		
+		return loginedMember != null;
+	}
+	
+	private void doLogout() {
+		if(isLogined() == false) {
+			System.out.println("로그인 상태가 아닙니다.");
+			return;
+		}
+		
+		loginedMember = null; // 로그아웃 상태
+		System.out.println("로그아웃 되었습니다.");
+		
+	}
+	
+	private void showList() {
+		System.out.println("== 회원 리스트 ==");
 		
 		if (members.size() == 0) {
-			System.out.println("회원 정보가 없습니다.");
+			System.out.println("현재 가입된 회원이 없습니다.");
 			return; 
 		}
 		
-		List<Article> forPrintArticles = members; 
+		List<Member> forPrintMembers = members; 
 		
-		String searchKeyword = cmd.substring("article list".length()).trim(); 
-		// substring - 앞의 글자수를 제외하고 뒤에 쓰는 글자 index부터 가져옴
+		String searchKeyword = cmd.substring("member profile".length()).trim(); 
 		
-		
-		if(searchKeyword.length() > 0) { // 리스트 검색
+		if(searchKeyword.length() > 0) { 
 			
 			System.out.println("검색어 : " + searchKeyword);
 			
-			forPrintArticles = new ArrayList<>(); // 해당된다면 객체 하나 더 생성
+			forPrintMembers = new ArrayList<>(); // 해당된다면 객체 하나 더 생성
 			
-			for(Article article : articles) {
-				if(article.title.contains(searchKeyword)) {
-					forPrintArticles.add(article);
+			for(Member article : members) {
+				if(article.loginId.contains(searchKeyword)) {
+					forPrintMembers.add(loginedMember);
 				}
 			}
 			
-			if(forPrintArticles.size() == 0) { // 검색해도 없는 경우
+			if(forPrintMembers.size() == 0) { // 검색해도 없는 경우
 				System.out.println("검색결과가 없습니다.");
 				return;
 			}
 			
 		}
 		
-		System.out.println("번호	|	제목	|	날짜			|	조회수");
+		System.out.println("번호	|	아이디	|	날짜			|	이름");
 		
-		for(int i = forPrintArticles.size() - 1; i >= 0; i--) { // 순회는 역순으로
-			Article article = forPrintArticles.get(i);
-			System.out.printf("%d	|	%s	|	%s	|	%d \n", article.id, article.title, article.regDate, article.viewCnt);
+		for(int i = forPrintMembers.size() - 1; i >= 0; i--) { // 순회는 역순으로
+			Member member = forPrintMembers.get(i);
+			System.out.printf("%d	|	%s	|	%s	|	%s \n", member.id, member.loginId, member.regDate, member.name);
 		}	
 		
 	}
@@ -189,9 +226,9 @@ System.out.println("== 회원 정보 ==");
 	
 	public void makeTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
-		members.add(new Member(1, Util.getNowDateStr(), "test1", "test1", "1번"));
-		members.add(new Member(2, Util.getNowDateStr() , "test2", "test2", "2번"));
-		members.add(new Member(3, Util.getNowDateStr() , "test3", "test3", "3번"));
+		members.add(new Member(1, Util.getNowDateStr(), "test1", "test1", "미국"));
+		members.add(new Member(2, Util.getNowDateStr() , "test2", "test2", "러시아"));
+		members.add(new Member(3, Util.getNowDateStr() , "test3", "test3", "중국"));
 		
 	}
 	
