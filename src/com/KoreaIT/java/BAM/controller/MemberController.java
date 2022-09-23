@@ -30,12 +30,16 @@ public class MemberController extends Controller{
 		case "login":
 			doLogin();
 			break;
+		case "profile":
+			showProfile();
+			break;
 			default:
 				System.out.println("존재하지 않는 명령어 입니다.");
 				break;
 
 		}
 	}
+
 
 	private void doJoin(){
 		int id = members.size() + 1;
@@ -104,7 +108,49 @@ public class MemberController extends Controller{
 		}
 		
 		loginedMember = member; // login정보를 들고 있기.
-		System.out.println("로그인 성공!");
+		System.out.printf("로그인 성공! %s님 환영합니다.\n", loginedMember.name);
+		
+	}
+	
+	private void showProfile() {
+System.out.println("== 회원 정보 ==");
+		
+		if (members.size() == 0) {
+			System.out.println("회원 정보가 없습니다.");
+			return; 
+		}
+		
+		List<Article> forPrintArticles = members; 
+		
+		String searchKeyword = cmd.substring("article list".length()).trim(); 
+		// substring - 앞의 글자수를 제외하고 뒤에 쓰는 글자 index부터 가져옴
+		
+		
+		if(searchKeyword.length() > 0) { // 리스트 검색
+			
+			System.out.println("검색어 : " + searchKeyword);
+			
+			forPrintArticles = new ArrayList<>(); // 해당된다면 객체 하나 더 생성
+			
+			for(Article article : articles) {
+				if(article.title.contains(searchKeyword)) {
+					forPrintArticles.add(article);
+				}
+			}
+			
+			if(forPrintArticles.size() == 0) { // 검색해도 없는 경우
+				System.out.println("검색결과가 없습니다.");
+				return;
+			}
+			
+		}
+		
+		System.out.println("번호	|	제목	|	날짜			|	조회수");
+		
+		for(int i = forPrintArticles.size() - 1; i >= 0; i--) { // 순회는 역순으로
+			Article article = forPrintArticles.get(i);
+			System.out.printf("%d	|	%s	|	%s	|	%d \n", article.id, article.title, article.regDate, article.viewCnt);
+		}	
 		
 	}
 	
@@ -139,6 +185,14 @@ public class MemberController extends Controller{
 			i++;
 		}
 		return -1;
+	}
+	
+	public void makeTestData() {
+		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
+		members.add(new Member(1, Util.getNowDateStr(), "test1", "test1", "1번"));
+		members.add(new Member(2, Util.getNowDateStr() , "test2", "test2", "2번"));
+		members.add(new Member(3, Util.getNowDateStr() , "test3", "test3", "3번"));
+		
 	}
 	
 }

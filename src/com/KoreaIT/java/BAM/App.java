@@ -23,6 +23,7 @@ public class App {
 		ArticleController articleController = new ArticleController(sc);
 		
 		articleController.makeTestData(); // 메서드 실행
+		memberController.makeTestData(); // 메서드 실행
 
 		while(true) {
 			System.out.printf("명령어 ) ");

@@ -215,16 +215,6 @@ public class ArticleController extends Controller{
 		return -1;
 	}
 
-//	private int getArticleIndexById(int id) {
-//		for(int i = 0; i < articles.size(); i++) { 
-//			Article article = articles.get(i);
-//			
-//			if(article.id == id) { 
-//				return i;
-//			}
-//		}
-//		return -1;
-//	}
 
 	private Article getArticleById(int id) { // 더 간결한 for문 - 단순히 도는 for문만 가능
 
@@ -236,30 +226,9 @@ public class ArticleController extends Controller{
 		
 		return null;
 		
-		//		for(Article article : articles) { 
-//			
-//			if(article.id == id) { 
-//				return article;
-//				
-//			}
-//		}
-//		return null;
 	}
 
 
-
-	
-//	private Article getArticleById(int id) { // 인자를 매개변수로 받아야함.
-//		for(int i = 0; i < articles.size(); i++) { // 게시글 순회
-//			Article article = articles.get(i);
-//			
-//			if(article.id == id) { // 명령어에 입력한 id가 일치한다면
-//				// 데이터를 순회하면서 뽑아내는 기능만 하는 로직
-//				return article;
-//			}
-//		}
-//		return null;
-//	}
 	
 	public void makeTestData() {
 		System.out.println("테스트를 위한 게시물 데이터를 생성합니다.");
