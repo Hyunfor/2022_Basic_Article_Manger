@@ -4,14 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class MemberController extends Controller{
 	private List<Member> members;
 	private Scanner sc;
-	private String cmd;
 	
 	
 	public MemberController(Scanner sc) {
@@ -35,14 +33,51 @@ public class MemberController extends Controller{
 		case "profile":
 			showProfile();
 			break;
-		case "list":
-			showList();
-			break;
-			default:
+		default:
 				System.out.println("존재하지 않는 명령어 입니다.");
 				break;
 
 		}
+	}
+	
+	private void doLogin(){
+		if(isLogined()) { 
+			System.out.println("이미 로그인 상태입니다.");
+			return;
+		}
+		
+		System.out.printf("로그인 아이디 : ");
+		String loginId = sc.nextLine();
+		System.out.printf("비밀번호 : ");
+		String loginPw = sc.nextLine();
+		
+		// 사용자의 입력 아이디와 일치하는 회원이 우리한테 있는지 확인 
+		Member member = getMemberByLoginId(loginId);
+		
+		if(member == null) { // 일치하는 회원이 없을때
+			System.out.println("일치하는 회원이 없습니다.");
+			return;
+		}
+		
+		if(member.loginPw.equals(loginPw) == false) { // 입력한 pw가 같은지 확인
+			System.out.println("비밀번호를 확인해주세요");
+			return;
+		}
+		
+		loginedMember = member; // login정보를 들고 있기.
+		System.out.printf("로그인 성공! %s님 환영합니다.\n", loginedMember.name);
+		
+	}
+	
+	private void doLogout() {
+		if(isLogined() == false) {
+			System.out.println("로그인 상태가 아닙니다.");
+			return;
+		}
+		
+		loginedMember = null; // 로그아웃 상태
+		System.out.println("로그아웃 되었습니다.");
+		
 	}
 
 	private void doJoin(){
@@ -91,36 +126,6 @@ public class MemberController extends Controller{
 		System.out.printf("%s 회원님 환영합니다 \n", loginId);
 		}
 	
-	
-	private void doLogin(){
-		if(isLogined()) { 
-			System.out.println("이미 로그인 상태입니다.");
-			return;
-		}
-		
-		System.out.printf("로그인 아이디 : ");
-		String loginId = sc.nextLine();
-		System.out.printf("비밀번호 : ");
-		String loginPw = sc.nextLine();
-		
-		// 사용자의 입력 아이디와 일치하는 회원이 우리한테 있는지 확인 
-		Member member = getMemberByLoginId(loginId);
-		
-		if(member == null) { // 일치하는 회원이 없을때
-			System.out.println("일치하는 회원이 없습니다.");
-			return;
-		}
-		
-		if(member.loginPw.equals(loginPw) == false) { // 입력한 pw가 같은지 확인
-			System.out.println("비밀번호를 확인해주세요");
-			return;
-		}
-		
-		loginedMember = member; // login정보를 들고 있기.
-		System.out.printf("로그인 성공! %s님 환영합니다.\n", loginedMember.name);
-		
-	}
-	
 	private void showProfile() {
 		
 		if(loginedMember == null) { // 로그아웃 상태
@@ -134,56 +139,16 @@ public class MemberController extends Controller{
 		
 	}
 	
-	private void doLogout() {
-		if(isLogined() == false) {
-			System.out.println("로그인 상태가 아닙니다.");
-			return;
+	private boolean loginIdChk(String loginId) {
+		int index = getMemberIndexByLoginId(loginId); // 먼저 실행 후
+		
+		if(index == -1) { // 아이디 중복이 없을 경우 true
+			return true;
 		}
 		
-		loginedMember = null; // 로그아웃 상태
-		System.out.println("로그아웃 되었습니다.");
-		
+		return false;
 	}
 	
-	private void showList() {
-		System.out.println("== 회원 리스트 ==");
-		
-		if (members.size() == 0) {
-			System.out.println("현재 가입된 회원이 없습니다.");
-			return; 
-		}
-		
-		List<Member> forPrintMembers = members; 
-		
-		String searchKeyword = cmd.substring("member profile".length()).trim(); 
-		
-		if(searchKeyword.length() > 0) { 
-			
-			System.out.println("검색어 : " + searchKeyword);
-			
-			forPrintMembers = new ArrayList<>(); // 해당된다면 객체 하나 더 생성
-			
-			for(Member article : members) {
-				if(article.loginId.contains(searchKeyword)) {
-					forPrintMembers.add(loginedMember);
-				}
-			}
-			
-			if(forPrintMembers.size() == 0) { // 검색해도 없는 경우
-				System.out.println("검색결과가 없습니다.");
-				return;
-			}
-			
-		}
-		
-		System.out.println("번호	|	아이디	|	날짜			|	이름");
-		
-		for(int i = forPrintMembers.size() - 1; i >= 0; i--) { // 순회는 역순으로
-			Member member = forPrintMembers.get(i);
-			System.out.printf("%d	|	%s	|	%s	|	%s \n", member.id, member.loginId, member.regDate, member.name);
-		}	
-		
-	}
 	
 	private Member getMemberByLoginId(String loginId) {
 		int index = getMemberIndexByLoginId(loginId);
@@ -193,17 +158,6 @@ public class MemberController extends Controller{
 		}
 		
 		return null;
-	}
-	
-
-	private boolean loginIdChk(String loginId) {
-		int index = getMemberIndexByLoginId(loginId); // 먼저 실행 후
-		
-		if(index == -1) { // 아이디 중복이 없을 경우 true
-			return true;
-		}
-		
-		return false;
 	}
 
 	private int getMemberIndexByLoginId(String loginId) {
