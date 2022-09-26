@@ -12,7 +12,7 @@ public class MemberController extends Controller{
 	private List<Member> members;
 	private Scanner sc;
 	private String cmd;
-	private Member loginedMember; // 전역 변수로 만들어서 login 정보를 세션에 저장
+	
 	
 	public MemberController(Scanner sc) {
 		this.members = new ArrayList<>();
@@ -21,8 +21,7 @@ public class MemberController extends Controller{
 	
 	@Override
 	public void doAction(String cmd, String methodName) {
-		this.cmd = cmd;
-		
+
 		switch(methodName) {
 		case "join":
 			doJoin();
@@ -133,11 +132,6 @@ public class MemberController extends Controller{
 		System.out.printf("로그인 아이디 : %s\n", loginedMember.loginId);
 		System.out.printf("이름 : %s\n", loginedMember.name);
 		
-	}
-	
-	private boolean isLogined() {
-		
-		return loginedMember != null;
 	}
 	
 	private void doLogout() {
