@@ -35,12 +35,20 @@ public class ArticleController extends Controller{
 			showList();
 			break;
 		case "modify":
+			if(isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요.");
+				break; 
+			}
 			doModify();
 			break;
 		case "detail":
 			showDetail();
 			break;
 		case "delete":
+			if(isLogined() == false) {
+				System.out.println("로그인 후 이용해주세요.");
+				break; 
+			}
 			doDelete();
 			break;
 			default:
@@ -121,19 +129,14 @@ public class ArticleController extends Controller{
 		
 		Article foundArticle = getArticleById(id);
 		
-		for(int i = 0; i < articles.size(); i++) { 
-			Article article = articles.get(i);
-			
-			if(article.id == id) { 
-				foundArticle = article; 
-				break;
-			}
-			
-		}
-		
 		if(foundArticle == null) { 
 			
 			System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
+			return;
+		}
+		
+		if(foundArticle.memberId != loginedMember.id) { // 게시글 작성자 확인 로직
+			System.out.println("권한이 없습니다.");
 			return;
 		}
 		
@@ -146,8 +149,7 @@ public class ArticleController extends Controller{
 		foundArticle.title = title; // 리모컨이 여러개 가지고 있어서 새로 입력 받은것으로 바뀜
 		foundArticle.body = body;
 		
-		System.out.printf("%d번 글이 수정되었습니다.\n", id, title, body);
-		
+		System.out.printf("%d번 글이 수정되었습니다.\n", id);
 	}
 	
 	private void showDetail() {
@@ -189,23 +191,19 @@ public class ArticleController extends Controller{
 		
 		int id = Integer.parseInt(cmdBits[2]);
 		
-		int foundIndex = getArticleIndexById(id);  // index를 사용하기 위해 변수를 하나 만듦 . -1번으로 존재하는 index는 존재하지 않기 때문에 
+		Article foundArticle = getArticleById(id);
 		
-		for(int i = 0; i < articles.size(); i++) { // 게시글 순회
-			Article article = articles.get(i);
-			
-			if(article.id == id) { // 명령어에 입력한 id가 일치한다면
-				foundIndex = i;
-				break;
-			}
-		}
-		
-		if(foundIndex == -1) {
+		if(foundArticle == null) {
 			System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
 			return;
 		}
 		
-		articles.remove(foundIndex); // index 번호 삭제
+		if(foundArticle.memberId != loginedMember.id) { // 게시글 작성자 확인 로직
+			System.out.println("권한이 없습니다.");
+			return;
+		}
+		
+		articles.remove(foundArticle); // remove가 알아서 해당 객체를 지워줌
 		System.out.printf("%d번 게시물이 삭제되었습니다.\n", id); // 삭제가 된다면 출력
 		
 	}
