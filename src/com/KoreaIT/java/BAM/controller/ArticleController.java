@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.util.Util;
@@ -15,7 +16,7 @@ public class ArticleController extends Controller{
 	// 일단 private 으로 만들고 다른 곳에서 필요하게 된다면 public으로 바꾸는 방향으로 
 	
 	public ArticleController(Scanner sc) {
-		this.articles = new ArrayList<>();
+		this.articles = Container.articleDao.articles;
 		this.sc = sc;
 	}
 	
@@ -99,8 +100,20 @@ public class ArticleController extends Controller{
 		System.out.println("번호	|	제목	|	날짜			|	작성자	|	조회수");
 		
 		for(int i = forPrintArticles.size() - 1; i >= 0; i--) { // 순회는 역순으로
-			Article article = forPrintArticles.get(i);
-			System.out.printf("%d	|	%s	|	%s	|	%s	|	%d \n", article.id, article.title, article.regDate, article.memberId, article.viewCnt);
+			Article article = forPrintArticles.get(i);		
+			
+			String writerName = null;
+			
+			List<Member> members = Container.memberDao.members;
+			
+			for(Member member : members) {
+				if(article.memberId == member.id) { // member.id 와 article의 memberId가 일치하면 작성자 이름출력
+					writerName = member.name;
+					break;
+				}
+			}
+			
+			System.out.printf("%d	|	%s	|	%s	|	%s	|	%d \n", article.id, article.title, article.regDate, writerName, article.viewCnt);
 		}
 		
 	}
@@ -162,7 +175,7 @@ public class ArticleController extends Controller{
 		
 			System.out.printf("번호 : %d \n", foundArticle.id);
 			System.out.printf("날짜 : %s \n", foundArticle.regDate);
-			System.out.printf("작성자 : %s \n", foundArticle.memberId);
+			System.out.printf("작성자 : %s \n", foundArticle.memberId); // PK
 			System.out.printf("제목 : %s \n", foundArticle.title);
 			System.out.printf("내용 : %s \n", foundArticle.body);
 			System.out.printf("조회수 : %s \n", foundArticle.viewCnt);
