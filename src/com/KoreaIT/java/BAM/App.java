@@ -23,7 +23,7 @@ public class App {
 		ArticleController articleController = new ArticleController(sc);
 		
 		articleController.makeTestData(); // 메서드 실행
-		memberController.makeTestData(); // 메서드 실행
+		memberController.makeTestData(); 
 
 		while(true) {
 			System.out.printf("명령어 ) ");
@@ -46,7 +46,7 @@ public class App {
 			}
 			
 			String controllerName = cmdBits[0];  // article 
-			String methodName = cmdBits[1]; // list
+			String methodName = cmdBits[1]; // write
 			
 			Controller controller = null;
 			
@@ -57,7 +57,53 @@ public class App {
 			} else {
 				System.out.println("존재하지 않는 명령어 입니다");
 				continue;
+			} 
+			
+			// 로그인이 필요한 경우 - 각controller에서 app으로 기능 이전
+//			String actionName = controllerName + "/" + methodName; // article , write 로 나눈 것을 / 로 다시 하나로 합침.
+			
+			switch(methodName) {
+				case "write" :
+				case "modify" : // switch case 문법 - 붙여두면 해당 되는 것에 실행
+				case "delete" :
+				case "logout" :
+				case "profile" :
+					if(Controller.isLogined() == false) {
+						System.out.println("로그인 후 이용해주세요.");
+						continue;
+					}
+					break;
+				case "login" :
+				case "join" :
+					if(Controller.isLogined() == false) {
+						System.out.println("로그아웃 후 이용해주세요.");
+						continue;
+					}
+					break;
+					
+					// 댓글 기능처럼 구분이 필요한 경우에는 나눠야함. 
+//				switch(actionName) {
+//					case "article/write" :
+//					case "article/modify" : // switch case 문법 - 붙여두면 해당 되는 것에 실행
+//					case "article/delete" :
+//					case "member/logout" :
+//					case "member/profile" :
+//						if(Controller.isLogined() == false) {
+//							System.out.println("로그인 후 이용해주세요.");
+//							continue;
+//						}
+//						break;
+//					case "member/login" :
+//					case "member/join" :
+//						if(Controller.isLogined() == false) {
+//							System.out.println("로그아웃 후 이용해주세요.");
+//							continue;
+//						}
+//						break;		
+					
 			}
+			
+			
 			
 			controller.doAction(cmd, methodName);
 		
@@ -68,5 +114,7 @@ public class App {
 		
 		sc.close();
 	}
+
+
 
 }

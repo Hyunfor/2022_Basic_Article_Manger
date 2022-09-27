@@ -6,7 +6,7 @@ public abstract class Controller { // 하나라도 추상메서드가 있다면 
 	
 	public static Member loginedMember; // Article과 Member공유재로 만들어두기
 	
-	public boolean isLogined() {
+	public static boolean isLogined() {
 		
 		return loginedMember != null;
 	}

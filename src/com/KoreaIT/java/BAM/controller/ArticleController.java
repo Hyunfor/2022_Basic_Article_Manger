@@ -25,30 +25,18 @@ public class ArticleController extends Controller{
 		
 		switch(methodName) {
 		case "write":
-			if(isLogined() == false) {
-				System.out.println("로그인 상태가 아닙니다.");
-				break; 
-			}
 			doWrite();
 			break;
 		case "list":
 			showList();
 			break;
-		case "modify":
-			if(isLogined() == false) {
-				System.out.println("로그인 후 이용해주세요.");
-				break; 
-			}
+		case "modify":	
 			doModify();
 			break;
 		case "detail":
 			showDetail();
 			break;
 		case "delete":
-			if(isLogined() == false) {
-				System.out.println("로그인 후 이용해주세요.");
-				break; 
-			}
 			doDelete();
 			break;
 			default:
