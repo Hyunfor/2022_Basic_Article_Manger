@@ -16,7 +16,6 @@ public class ArticleController extends Controller{
 	// 일단 private 으로 만들고 다른 곳에서 필요하게 된다면 public으로 바꾸는 방향으로 
 	
 	public ArticleController(Scanner sc) {
-		this.articles = Container.articleDao.articles;
 		this.sc = sc;
 	}
 	
@@ -68,34 +67,16 @@ public class ArticleController extends Controller{
 	private void showList() {
 		System.out.println("== 게시물 리스트 ==");
 		
-		if (articles.size() == 0) {
-			System.out.println("게시물이 없습니다.");
-			return; // return 명령어로 함수 종료 . 리턴 안하겠다
-		}
-		
-		List<Article> forPrintArticles = articles; 
-		
-		String searchKeyword = cmd.substring("article list".length()).trim(); 
+		String searchKeyword = cmd.substring("article list".length()).trim();
 		// substring - 앞의 글자수를 제외하고 뒤에 쓰는 글자 index부터 가져옴
 		
+		System.out.println("검색어 : " + searchKeyword);	
 		
-		if(searchKeyword.length() > 0) { // 리스트 검색
-			
-			System.out.println("검색어 : " + searchKeyword);
-			
-			forPrintArticles = new ArrayList<>(); // 해당된다면 객체 하나 더 생성
-			
-			for(Article article : articles) {
-				if(article.title.contains(searchKeyword)) {
-					forPrintArticles.add(article);
-				}
-			}
-			
-			if(forPrintArticles.size() == 0) { // 검색해도 없는 경우
-				System.out.println("검색결과가 없습니다.");
-				return;
-			}
-			
+		List<Article> forPrintArticles = Container.articleService.getForPrintArticles(searchKeyword); 		
+
+		if(forPrintArticles.size() == 0) { // 검색해도 없는 경우
+			System.out.println("검색결과가 없습니다.");
+			return;
 		}
 		
 		System.out.println("번호	|	제목	|	날짜			|	작성자	|	조회수");
