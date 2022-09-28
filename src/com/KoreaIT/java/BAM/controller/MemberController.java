@@ -74,7 +74,8 @@ public class MemberController extends Controller{
 	}
 
 	private void doJoin(){
-		int id = members.size() + 1;
+		int id = Container.memberDao.getNewId();
+//		int id = members.size() + 1;
 		String regDate = Util.getNowDateStr();
 		
 		String loginId = null;
@@ -114,7 +115,8 @@ public class MemberController extends Controller{
 		
 		Member member = new Member(id, regDate, loginId, loginPw, name);
 		
-		members.add(member); // join 할때마다 게시글을 하나씩 배열에 저장
+		Container.memberDao.add(member); // Dao에서 add 하도록 넘김.
+//		members.add(member); // join 할때마다 게시글을 하나씩 배열에 저장
 		
 		System.out.printf("%s 회원님 환영합니다 \n", loginId);
 		}
@@ -162,9 +164,9 @@ public class MemberController extends Controller{
 	
 	public void makeTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
-		members.add(new Member(1, Util.getNowDateStr(), "test1", "test1", "미국"));
-		members.add(new Member(2, Util.getNowDateStr() , "test2", "test2", "러시아"));
-		members.add(new Member(3, Util.getNowDateStr() , "test3", "test3", "중국"));
+		Container.memberDao.add(new Member(Container.memberDao.getNewId(), Util.getNowDateStr(), "test1", "test1", "미국"));
+		Container.memberDao.add(new Member(Container.memberDao.getNewId(), Util.getNowDateStr() , "test2", "test2", "러시아"));
+		Container.memberDao.add(new Member(Container.memberDao.getNewId(), Util.getNowDateStr() , "test3", "test3", "중국"));
 		
 	}
 	
