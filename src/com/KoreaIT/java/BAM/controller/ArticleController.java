@@ -172,11 +172,22 @@ public class ArticleController extends Controller{
 			return;
 		} 
 		
+		String writerName = null;
+		
+		List<Member> members = Container.memberDao.members;
+		
+		for(Member member : members) {
+			if(foundArticle.memberId == member.id) { // member.id 와 article의 memberId가 일치하면 작성자 이름출력
+				writerName = member.name;
+				break;
+			}
+		}
+		
 		foundArticle.addViewCnt(); // 조회수
 		
 			System.out.printf("번호 : %d \n", foundArticle.id);
 			System.out.printf("날짜 : %s \n", foundArticle.regDate);
-			System.out.printf("작성자 : %s \n", foundArticle.memberId); // PK
+			System.out.printf("작성자 : %s \n", writerName); // PK
 			System.out.printf("제목 : %s \n", foundArticle.title);
 			System.out.printf("내용 : %s \n", foundArticle.body);
 			System.out.printf("조회수 : %s \n", foundArticle.viewCnt);

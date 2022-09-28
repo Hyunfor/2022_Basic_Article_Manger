@@ -43,26 +43,51 @@ public class MemberController extends Controller{
 	
 	private void doLogin(){
 		
-		System.out.printf("로그인 아이디 : ");
-		String loginId = sc.nextLine();
-		System.out.printf("비밀번호 : ");
-		String loginPw = sc.nextLine();
-		
-		// 사용자의 입력 아이디와 일치하는 회원이 우리한테 있는지 확인 
-		Member member = getMemberByLoginId(loginId);
-		
-		if(member == null) { // 일치하는 회원이 없을때
-			System.out.println("일치하는 회원이 없습니다.");
-			return;
-		}
-		
-		if(member.loginPw.equals(loginPw) == false) { // 입력한 pw가 같은지 확인
-			System.out.println("비밀번호를 확인해주세요");
-			return;
+		Member member = null;
+		String loginPw = null;
+		while(true){
+			System.out.printf("로그인 아이디 : ");
+			String loginId = sc.nextLine(); 
+			
+			if(loginId.trim().length() == 0) { // 아이디의 길이가 0이라면 - 입력하지 않은 경우
+				// trim()으로 공백 체크
+				System.out.println("로그인 아이디를 입력해주세요.");
+				continue;
+			}
+			
+			while(true) {
+				System.out.printf("로그인 비밀번호 : ");
+				loginPw = sc.nextLine();
+				
+				
+				if(loginPw.trim().length() == 0) {
+					System.out.println("로그인 비밀번호를 입력해주세요.");
+					continue;
+				}
+				break;
+			}
+			
+			
+			// 사용자의 입력 아이디와 일치하는 회원이 우리한테 있는지 확인 
+			member = getMemberByLoginId(loginId);
+				
+			if(member == null) { // 일치하는 회원이 없을때
+					System.out.println("일치하는 회원이 없습니다.");
+					return;
+				}
+				
+			if(member.loginPw.equals(loginPw) == false) { // 입력한 pw가 같은지 확인
+					System.out.println("비밀번호가 일치하지 않습니다.");
+					return;
+				}
+			
+			break;
 		}
 		
 		loginedMember = member; // login정보를 들고 있기.
 		System.out.printf("로그인 성공! %s님 환영합니다.\n", loginedMember.name);
+		
+		
 		
 	}
 	
