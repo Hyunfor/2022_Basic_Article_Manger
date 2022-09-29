@@ -25,7 +25,7 @@ public class ArticleDao extends Dao{
 		
 //		if(searchKeyword.length() > 0) { // 리스트 검색
 		
-		if(searchKeyword != null) { // 검색 후 null이 아닐때 
+		if(searchKeyword != null && searchKeyword.length() != 0) { // 검색 후 null이 아닐때 
 		
 			System.out.println("검색어 : " + searchKeyword);	
 			
@@ -40,6 +40,7 @@ public class ArticleDao extends Dao{
 			}
 			return articles;
 	}
+
 	
 	public int getArticleIndexById(int id) {
 		int i = 0;

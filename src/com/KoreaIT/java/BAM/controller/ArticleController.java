@@ -8,17 +8,19 @@ import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.service.ArticleService;
+import com.KoreaIT.java.BAM.service.MemberService;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller{
 	private Scanner sc;
 	private String cmd;
 	// 일단 private 으로 만들고 다른 곳에서 필요하게 된다면 public으로 바꾸는 방향으로 
-	
 	private ArticleService articleService;
-	
+	private MemberService memberService;
+
 	public ArticleController(Scanner sc) {
-		articleService = Container.articleService;
+		this.articleService = Container.articleService;
+		this.memberService = Container.memberService;
 		this.sc = sc;
 	}
 	
@@ -86,16 +88,7 @@ public class ArticleController extends Controller{
 		for(int i = forPrintArticles.size() - 1; i >= 0; i--) { // 순회는 역순으로
 			Article article = forPrintArticles.get(i);		
 			
-			String writerName = null;
-			
-			List<Member> members = Container.memberDao.members;
-			
-			for(Member member : members) {
-				if(article.memberId == member.id) { // member.id 와 article의 memberId가 일치하면 작성자 이름출력
-					writerName = member.name;
-					break;
-				}
-			}
+			String writerName = memberService.getWriterName(article.memberId);
 			
 			System.out.printf("%d	|	%s	|	%s	|	%s	|	%d \n", article.id, article.title, article.regDate, writerName, article.viewCnt);
 		}
@@ -155,16 +148,7 @@ public class ArticleController extends Controller{
 			return;
 		} 
 		
-		String writerName = null;
-		
-		List<Member> members = Container.memberDao.members;
-		
-		for(Member member : members) {
-			if(foundArticle.memberId == member.id) { // member.id 와 article의 memberId가 일치하면 작성자 이름출력
-				writerName = member.name;
-				break;
-			}
-		}
+		String writerName = memberService.getWriterName(foundArticle.memberId);
 		
 		foundArticle.addViewCnt(); // 조회수
 		

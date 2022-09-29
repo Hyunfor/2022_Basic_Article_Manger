@@ -6,15 +6,15 @@ import java.util.Scanner;
 
 import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dto.Member;
+import com.KoreaIT.java.BAM.service.MemberService;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class MemberController extends Controller{
-	private List<Member> members;
 	private Scanner sc;
-	
+	private MemberService memberService;
 	
 	public MemberController(Scanner sc) {
-		this.members = Container.memberDao.members;
+		this.memberService = Container.memberService;
 		this.sc = sc;
 	}
 	
@@ -69,7 +69,7 @@ public class MemberController extends Controller{
 			
 			
 			// 사용자의 입력 아이디와 일치하는 회원이 우리한테 있는지 확인 
-			member = getMemberByLoginId(loginId);
+			member = memberService.getMemberByLoginId(loginId);
 				
 			if(member == null) { // 일치하는 회원이 없을때
 					System.out.println("일치하는 회원이 없습니다.");
@@ -99,7 +99,7 @@ public class MemberController extends Controller{
 	}
 
 	private void doJoin(){
-		int id = Container.memberDao.setArticleId();
+		int id = memberService.setArticleId();
 //		int id = members.size() + 1;
 		String regDate = Util.getNowDateStr();
 		
@@ -108,7 +108,7 @@ public class MemberController extends Controller{
 			System.out.printf("로그인 아이디 : ");
 			loginId = sc.nextLine();
 			
-			if(loginIdChk(loginId) == false) { // 
+			if(memberService.loginIdChk(loginId) == false) { // 
 				System.out.printf("%s은(는) 이미 사용중인 아이디입니다.\n", loginId);
 				continue;
 			}
@@ -140,7 +140,7 @@ public class MemberController extends Controller{
 		
 		Member member = new Member(id, regDate, loginId, loginPw, name);
 		
-		Container.memberDao.add(member); // Dao에서 add 하도록 넘김.
+		memberService.add(member); // Dao에서 add 하도록 넘김.
 //		members.add(member); // join 할때마다 게시글을 하나씩 배열에 저장
 		
 		System.out.printf("%s 회원님 환영합니다 \n", loginId);
@@ -154,44 +154,12 @@ public class MemberController extends Controller{
 		
 	}
 	
-	private boolean loginIdChk(String loginId) {
-		int index = getMemberIndexByLoginId(loginId); // 먼저 실행 후
-		
-		if(index == -1) { // 아이디 중복이 없을 경우 true
-			return true;
-		}
-		
-		return false;
-	}
-	
-	
-	private Member getMemberByLoginId(String loginId) {
-		int index = getMemberIndexByLoginId(loginId);
-		
-		if(index != -1) { // 순회 후 일치하는 회원 발견 
-			return members.get(index);
-		}
-		
-		return null;
-	}
-
-	private int getMemberIndexByLoginId(String loginId) {
-		int i = 0;
-		for(Member member : members) { 
-			
-			if(member.loginId.equals(loginId)) { // 문자열은 equals로 
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
 	
 	public void makeTestData() {
 		System.out.println("테스트를 위한 회원 데이터를 생성합니다.");
-		Container.memberDao.add(new Member(Container.memberDao.setArticleId(), Util.getNowDateStr(), "test1", "test1", "미국"));
-		Container.memberDao.add(new Member(Container.memberDao.setArticleId(), Util.getNowDateStr() , "test2", "test2", "러시아"));
-		Container.memberDao.add(new Member(Container.memberDao.setArticleId(), Util.getNowDateStr() , "test3", "test3", "중국"));
+		memberService.add(new Member(memberService.setArticleId(), Util.getNowDateStr(), "test1", "test1", "미국"));
+		memberService.add(new Member(memberService.setArticleId(), Util.getNowDateStr() , "test2", "test2", "러시아"));
+		memberService.add(new Member(memberService.setArticleId(), Util.getNowDateStr() , "test3", "test3", "중국"));
 		
 	}
 	
