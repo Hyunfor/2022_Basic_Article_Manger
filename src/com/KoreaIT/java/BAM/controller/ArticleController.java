@@ -7,15 +7,18 @@ import java.util.Scanner;
 import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
+import com.KoreaIT.java.BAM.service.ArticleService;
 import com.KoreaIT.java.BAM.util.Util;
 
 public class ArticleController extends Controller{
-	private List<Article> articles;
 	private Scanner sc;
 	private String cmd;
 	// 일단 private 으로 만들고 다른 곳에서 필요하게 된다면 public으로 바꾸는 방향으로 
 	
+	private ArticleService articleService;
+	
 	public ArticleController(Scanner sc) {
+		articleService = Container.articleService;
 		this.sc = sc;
 	}
 	
@@ -47,17 +50,18 @@ public class ArticleController extends Controller{
 	
 	private void doWrite(){
 		
-		int id = Container.articleDao.getNewId();
+		int id = Container.articleService.setArticleId();
 //		int id = articles.size() + 1;	
 		String regDate = Util.getNowDateStr();
 		System.out.printf("제목 : ");
 		String title = sc.nextLine();
 		System.out.printf("내용 : ");
 		String body = sc.nextLine();
+			
 
 		Article article = new Article(id, regDate, loginedMember.id, title, body);
 		
-		Container.articleDao.add(article); // 직접 add 하던 일을 Dao로 빼서 이용
+		articleService.add(article); // 직접 add 하던 일을 Dao로 빼서 이용
 //		articles.add(article); // write 할때마다 게시글을 하나씩 배열에 저장
 		
 		System.out.printf("%d번 글이 생성되었습니다 \n", id, title, body);
@@ -70,9 +74,7 @@ public class ArticleController extends Controller{
 		String searchKeyword = cmd.substring("article list".length()).trim();
 		// substring - 앞의 글자수를 제외하고 뒤에 쓰는 글자 index부터 가져옴
 		
-		System.out.println("검색어 : " + searchKeyword);	
-		
-		List<Article> forPrintArticles = Container.articleService.getForPrintArticles(searchKeyword); 		
+		List<Article> forPrintArticles = articleService.getForPrintArticles(searchKeyword); 		
 
 		if(forPrintArticles.size() == 0) { // 검색해도 없는 경우
 			System.out.println("검색결과가 없습니다.");
@@ -110,7 +112,7 @@ public class ArticleController extends Controller{
 		
 		int id = Integer.parseInt(cmdBits[2]);
 		
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 		
 		if(foundArticle == null) { 
 			
@@ -145,7 +147,7 @@ public class ArticleController extends Controller{
 		
 		int id = Integer.parseInt(cmdBits[2]);
 		
-		Article foundArticle = getArticleById(id); // 인자로 넣음.
+		Article foundArticle = articleService.getArticleById(id); // 인자로 넣음.
 		
 		if(foundArticle == null) {
 			// 출력을 담당하는 로직
@@ -185,7 +187,7 @@ public class ArticleController extends Controller{
 		
 		int id = Integer.parseInt(cmdBits[2]);
 		
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 		
 		if(foundArticle == null) {
 			System.out.printf("%d번 게시글은 존재하지 않습니다.\n", id);
@@ -197,43 +199,19 @@ public class ArticleController extends Controller{
 			return;
 		}
 		
-		articles.remove(foundArticle); // remove가 알아서 해당 객체를 지워줌
+		articleService.remove(foundArticle); // remove가 알아서 해당 객체를 지워줌
 		System.out.printf("%d번 게시물이 삭제되었습니다.\n", id); // 삭제가 된다면 출력
 		
 	}
 
-	private int getArticleIndexById(int id) {
-		int i = 0;
-		for(Article article : articles) { 
-			
-			if(article.id == id) { 
-				return i;
-			}
-			i++;
-		}
-		return -1;
-	}
-
-
-	private Article getArticleById(int id) { // 더 간결한 for문 - 단순히 도는 for문만 가능
-
-		int index = getArticleIndexById(id);
-		
-		if(index != -1) {
-			return articles.get(index);
-		}
-		
-		return null;
-		
-	}
 
 
 	
 	public void makeTestData() {
 		System.out.println("테스트를 위한 게시물 데이터를 생성합니다.");
-		Container.articleDao.add(new Article(Container.articleDao.getNewId(), Util.getNowDateStr(), 1, "제목1", "내용1", 11));
-		Container.articleDao.add(new Article(Container.articleDao.getNewId(), Util.getNowDateStr(), 2, "제목2", "내용2", 12));
-		Container.articleDao.add(new Article(Container.articleDao.getNewId(), Util.getNowDateStr(), 2, "제목3", "내용3", 13));
+		articleService.add(new Article(Container.articleService.setArticleId(), Util.getNowDateStr(), 1, "제목1", "내용1", 11));
+		articleService.add(new Article(Container.articleService.setArticleId(), Util.getNowDateStr(), 2, "제목2", "내용2", 12));
+		articleService.add(new Article(Container.articleService.setArticleId(), Util.getNowDateStr(), 2, "제목3", "내용3", 13));
 		
 	}
 	
