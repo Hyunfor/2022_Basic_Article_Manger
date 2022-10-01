@@ -1,5 +1,7 @@
 package com.KoreaIT.java.BAM.service;
 
+import java.util.List;
+
 import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dao.MemberDao;
 import com.KoreaIT.java.BAM.dto.Member;
@@ -30,6 +32,10 @@ public class MemberService {
 
 	public String getWriterName(int memberId) {
 		return memberDao.getWriterName(memberId);
+	}
+
+	public List<Member> getForPrintMembers(String searchKeyword) {
+		return memberDao.getForPrintMembers(searchKeyword);
 	}
 
 

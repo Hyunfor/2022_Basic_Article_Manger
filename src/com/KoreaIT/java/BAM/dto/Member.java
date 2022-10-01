@@ -4,6 +4,7 @@ public class Member extends Dto{
 	public String loginId;
 	public String loginPw;
 	public String name;
+	public int memberId;
 	
 //	public Member (int id, String regDate, String loginId, String loginPw, String loginPwChk, String name){ // 생성자
 //		this(id, regDate, loginId, loginPw, loginPwChk, name); // 다른 생성자에게 일을 떠넘김

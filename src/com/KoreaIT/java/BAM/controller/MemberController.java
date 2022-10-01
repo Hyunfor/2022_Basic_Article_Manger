@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.KoreaIT.java.BAM.container.Container;
+import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
 import com.KoreaIT.java.BAM.service.MemberService;
 import com.KoreaIT.java.BAM.util.Util;
@@ -12,6 +13,7 @@ import com.KoreaIT.java.BAM.util.Util;
 public class MemberController extends Controller{
 	private Scanner sc;
 	private MemberService memberService;
+	private String cmd;
 	
 	public MemberController(Scanner sc) {
 		this.memberService = Container.memberService;
@@ -20,7 +22,8 @@ public class MemberController extends Controller{
 	
 	@Override
 	public void doAction(String cmd, String methodName) {
-
+		this.cmd = cmd;
+		
 		switch(methodName) {
 		case "join":
 			doJoin();
@@ -34,6 +37,9 @@ public class MemberController extends Controller{
 		case "profile":
 			showProfile();
 			break;
+		case "list":
+			showList();
+			break;
 		default:
 				System.out.println("존재하지 않는 명령어 입니다.");
 				break;
@@ -41,6 +47,8 @@ public class MemberController extends Controller{
 		}
 	}
 	
+
+
 	private void doLogin(){
 		
 		Member member = null;
@@ -153,6 +161,32 @@ public class MemberController extends Controller{
 		System.out.printf("이름 : %s\n", loginedMember.name);
 		
 	}
+	
+	private void showList() {
+		System.out.println("== 활동 중인 회원 리스트 ==");
+		
+		String searchKeyword = cmd.substring("member list".length()).trim();
+		// substring - 앞의 글자수를 제외하고 뒤에 쓰는 글자 index부터 가져옴
+		
+		List<Member> forPrintMembers = memberService.getForPrintMembers(searchKeyword); 		
+
+		if(forPrintMembers.size() == 0) { // 검색해도 없는 경우
+			System.out.println("검색결과가 없습니다.");
+			return;
+		}
+		
+		System.out.println("번호	|	아이디	|	작성자	");
+		
+		for(int i = forPrintMembers.size() - 1; i >= 0; i--) { // 순회는 역순으로
+			Member member = forPrintMembers.get(i);		
+			
+			String writerName = memberService.getWriterName(member.memberId);
+			
+			System.out.printf("%d	|	%s	|	%s	\n", member.id, member.loginId, member.name);
+		}
+		
+	}
+		
 	
 	
 	public void makeTestData() {

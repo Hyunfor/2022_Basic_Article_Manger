@@ -3,6 +3,7 @@ package com.KoreaIT.java.BAM.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.KoreaIT.java.BAM.dto.Article;
 import com.KoreaIT.java.BAM.dto.Member;
 
 public class MemberDao extends Dao{
@@ -59,6 +60,23 @@ public class MemberDao extends Dao{
 			}
 		}
 		return null;
+	}
+
+	public List<Member> getForPrintMembers(String searchKeyword) {
+		if(searchKeyword != null && searchKeyword.length() != 0) { // 검색 후 null이 아닐때 
+			
+			System.out.println("검색어 : " + searchKeyword);	
+			
+			List<Member> forPrintMembers = new ArrayList<>(); // 해당된다면 객체 하나 더 생성
+		
+			for(Member member : members) {
+				if(member.loginId.contains(searchKeyword)) {
+					forPrintMembers.add(member);
+					}
+				}
+				return forPrintMembers;
+			}
+			return members;
 	}
 	
 }
