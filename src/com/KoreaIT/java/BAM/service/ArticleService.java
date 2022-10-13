@@ -24,7 +24,6 @@ public class ArticleService {
 		return articleDao.setArticleId();
 	}
 
-
 	public void add(Article article) {
 		articleDao.add(article);	
 	}

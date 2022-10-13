@@ -68,6 +68,7 @@ public class App {
 				case "delete" :
 				case "logout" :
 				case "profile" :
+				case "update" :
 					if(Controller.isLogined() == false) {
 						System.out.println("로그인 후 이용해주세요.");
 						continue;

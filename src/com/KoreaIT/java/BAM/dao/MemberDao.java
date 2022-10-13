@@ -78,6 +78,10 @@ public class MemberDao extends Dao{
 			}
 			return members;
 	}
+	
+	public void remove(Member foundMember) {
+		members.remove(foundMember);
+	}
 
 	public Member getMemberById(int id) {
 		int index = getMemberIndexById(id);
@@ -100,5 +104,6 @@ public class MemberDao extends Dao{
 		}
 		return -1;
 	}
+
 	
 }

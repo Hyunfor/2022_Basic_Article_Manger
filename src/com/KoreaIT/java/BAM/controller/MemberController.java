@@ -43,13 +43,16 @@ public class MemberController extends Controller{
 		case "list":
 			showList();
 			break;
+		case "delete":
+			doDelete();
+			break;
 		default:
 				System.out.println("존재하지 않는 명령어 입니다.");
 				break;
 
 		}
 	}
-	
+
 	private void doLogin(){
 		
 		Member member = null;
@@ -228,6 +231,33 @@ public class MemberController extends Controller{
 			
 			System.out.printf("%d	|	%s	|	%s	\n", member.id, member.loginId, member.name);
 		}
+		
+	}
+	
+	private void doDelete() {
+		String[] cmdBits = cmd.split(" ");
+		
+		if(cmdBits.length == 2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+		
+		int id = Integer.parseInt(cmdBits[2]);
+		
+		Member foundMember = memberService.getMemberById(id);
+		
+		if(foundMember == null) {
+			System.out.printf("%d번 회원은 존재하지 않습니다.\n", id);
+			return;
+		}
+		
+		if(foundMember.memberId != loginedMember.id) { 
+			System.out.println("권한이 없습니다.");
+			return;
+		}
+		
+		memberService.remove(foundMember); // remove가 알아서 해당 객체를 지워줌
+		System.out.printf("%s 회원님 그동안 이용해주셔서 감사합니다.", id); // 탈퇴가 되었다면 출력
 		
 	}
 		

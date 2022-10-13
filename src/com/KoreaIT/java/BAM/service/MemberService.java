@@ -42,6 +42,10 @@ public class MemberService {
 		return memberDao.getMemberById(id);
 	}
 
+	public void remove(Member foundMember) {
+		memberDao.remove(foundMember);
+	}
+
 
 	
 
