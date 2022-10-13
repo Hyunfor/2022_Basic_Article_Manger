@@ -78,5 +78,27 @@ public class MemberDao extends Dao{
 			}
 			return members;
 	}
+
+	public Member getMemberById(int id) {
+		int index = getMemberIndexById(id);
+		
+		if(index != -1) {
+			return members.get(index);
+		}
+		
+		return null;
+	}
+
+	private int getMemberIndexById(int id) {
+		int i = 0;
+		for(Member member : members) { 
+			
+			if(member.id == id) { 
+				return i;
+			}
+			i++;
+		}
+		return -1;
+	}
 	
 }

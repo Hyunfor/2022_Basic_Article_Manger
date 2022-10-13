@@ -26,20 +26,17 @@ public class ArticleService {
 
 
 	public void add(Article article) {
-		articleDao.add(article);
-		
+		articleDao.add(article);	
 	}
 
 
 	public Article getArticleById(int id) {
-		
 		return articleDao.getArticleById(id);
 	}
 
 
 	public void remove(Article foundArticle) {
 		articleDao.remove(foundArticle);
-		
 	}
 	
 }

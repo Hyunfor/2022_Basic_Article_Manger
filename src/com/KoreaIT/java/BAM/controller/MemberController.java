@@ -34,6 +34,9 @@ public class MemberController extends Controller{
 		case "logout":
 			doLogout();
 			break;
+		case "modify":	
+			doUpdate();
+			break;
 		case "profile":
 			showProfile();
 			break;
@@ -47,8 +50,6 @@ public class MemberController extends Controller{
 		}
 	}
 	
-
-
 	private void doLogin(){
 		
 		Member member = null;
@@ -105,6 +106,49 @@ public class MemberController extends Controller{
 		System.out.println("로그아웃 되었습니다.");
 		
 	}
+	
+	private void doUpdate() { // 회원정보 수정
+		String[] cmdBits = cmd.split(" ");
+		
+		if(cmdBits.length == 2) {
+			System.out.println("명령어를 확인해주세요");
+			return;
+		}
+		
+		int id = Integer.parseInt(cmdBits[2]);
+		
+		Member foundMember = memberService.getMemberById(id);
+		
+		if(foundMember == null) { 
+			System.out.printf("%d번 회원은 존재하지 않습니다.\n", id);
+			return;
+		}
+		
+		String loginPw = null;
+		String loginPwChk = null;
+		while(true) {
+			System.out.printf("새로운 비밀번호 : ");
+			loginPw = sc.nextLine();
+			System.out.printf("비밀번호 확인 : ");
+			loginPwChk = sc.nextLine();
+			
+			if(loginPw.equals(loginPwChk) == false) { 
+				System.out.println("비밀번호를 다시 입력해주세요.");
+				continue;
+			}
+			break; 
+		}
+		System.out.printf("새로운 이름 : ");
+		String name = sc.nextLine();
+		
+		// 객체 리모컨이 여러개라 바뀌는게 가능
+		foundMember.loginPw = loginPw; // 리모컨이 여러개 가지고 있어서 새로 입력 받은것으로 바뀜
+		foundMember.name = name;
+		
+		System.out.printf("%s 회원님 정보가 수정되었습니다.\n", id);
+		
+	}
+
 
 	private void doJoin(){
 		int id = memberService.setArticleId();

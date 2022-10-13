@@ -38,6 +38,10 @@ public class MemberService {
 		return memberDao.getForPrintMembers(searchKeyword);
 	}
 
+	public Member getMemberById(int id) {
+		return memberDao.getMemberById(id);
+	}
+
 
 	
 
