@@ -251,13 +251,8 @@ public class MemberController extends Controller{
 			return;
 		}
 		
-		if(foundMember.memberId != loginedMember.id) { 
-			System.out.println("권한이 없습니다.");
-			return;
-		}
-		
 		memberService.remove(foundMember); // remove가 알아서 해당 객체를 지워줌
-		System.out.printf("%s 회원님 그동안 이용해주셔서 감사합니다.", id); // 탈퇴가 되었다면 출력
+		System.out.printf("%s 회원님 그동안 이용해주셔서 감사합니다.\n", id); // 탈퇴가 되었다면 출력
 		
 	}
 		
