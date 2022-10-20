@@ -45,8 +45,6 @@ public class MemberService {
 	public void remove(Member foundMember) {
 		memberDao.remove(foundMember);
 	}
-
-
 	
 
 }
