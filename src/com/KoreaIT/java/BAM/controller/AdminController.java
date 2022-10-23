@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import com.KoreaIT.java.BAM.container.Container;
 import com.KoreaIT.java.BAM.dto.Admin;
+import com.KoreaIT.java.BAM.modelandview.ModelAndView;
 import com.KoreaIT.java.BAM.service.AdminService;
 
 public class AdminController {
@@ -32,7 +33,7 @@ public class AdminController {
 //		}
 //	}
 
-	private adminlogin(String admin_id, String admin_pw) {
+	private AdminController(String admin_id, String admin_pw) {
 		
 		//로그인 체크도 같이 함
         //dto에 값들을 넣기 위해 객체를 생성.
@@ -41,15 +42,17 @@ public class AdminController {
 		admindto.setAdmin_id(admin_id);
 		admindto.setAdmin_pw(admin_pw);
 		
-		boolean result = adminService.login(dto, session);
+		Object dto;
+		Object Session;
+		boolean result = adminService.login(dto, Session);
 		ModelAndView mav = new ModelAndView();
 		
 
         if(result)    {//로그인이 성공했을시 출력되는 구문
             mav.setViewName("home");    //로그인이 성공했을시 이동하게되는 뷰의 이름
-            mav.addObject("admin_id", session.getAttribute(admin_id));
+            mav.addObject("admin_id", Session.getAttribute(admin_id));
             
-            }else if(session.getAttribute(admin_id) == null) {    //로그인 실패 했을시 출력
+            }else if(Session.getAttribute(admin_id) == null) {    //로그인 실패 했을시 출력
                 
                 //로그인이 실패했을 시에 다시 관리자 로그인 페이지로 이동함
                 
@@ -61,7 +64,7 @@ public class AdminController {
             
             }
         
-                return mav;
+                return;
         }
 		
 	
